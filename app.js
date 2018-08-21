@@ -3,11 +3,24 @@ const chalk = require('chalk');
 const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require('path');
+const sql = require('mssql');
+
+const title = 'Library';
 
 const app = express();
 
 const port = process.env.PORT || 3000;
-const title = 'Library';
+
+const config = {
+    user: 'library',
+    password: 'password123!',
+    server: 'pslibraryjb.database.windows.net',
+    database: 'PSLibrary',
+
+    options: {
+        encrypt: true // use this if you're on Windows Azure
+    }
+};
 
 const nav = [
     {link: '/books', title: 'Book'},
@@ -15,6 +28,8 @@ const nav = [
 ];
 
 const bookRouter = require('./src/routes/bookRoutes')(nav, title);
+
+sql.connect(config).catch(err => debug(err));
 
 app.use(morgan('tiny'));
 app.use(express.static(path.join(__dirname, '/public')));
