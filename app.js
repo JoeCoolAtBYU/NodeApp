@@ -7,7 +7,7 @@ const path = require('path');
 const {mongoClient} = require('mongodb');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const cookieParser = require('cookieParser');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 const title = 'Library';
