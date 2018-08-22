@@ -6,6 +6,9 @@ const path = require('path');
 // const sql = require('mssql');
 const {mongoClient} = require('mongodb');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const cookieParser = require('cookieParser');
+const session = require('express-session');
 
 const title = 'Library';
 
@@ -37,6 +40,11 @@ const authRouter = require('./src/routes/authRoutes')(nav, title);
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+app.use(session({secret: 'library'}));
+
+require('./src/config/passport.js')(app);
+
 app.use(express.static(path.join(__dirname, '/public')));
 app.use('/css', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/css')));
 app.use('/js', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/js')));
