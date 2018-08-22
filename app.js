@@ -3,7 +3,8 @@ const chalk = require('chalk');
 const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require('path');
-const sql = require('mssql');
+// const sql = require('mssql');
+const {mongoClient} = require('mongodb');
 
 const title = 'Library';
 
@@ -11,16 +12,17 @@ const app = express();
 
 const port = process.env.PORT || 3000;
 
-const config = {
-    user: 'library',
-    password: 'password123!',
-    server: 'pslibraryjb.database.windows.net',
-    database: 'PSLibrary',
-
-    options: {
-        encrypt: true // use this if you're on Windows Azure
-    }
-};
+// this is for sqlServer database config with Azure
+// const config = {
+//     user: 'library',
+//     password: 'password123!',
+//     server: 'pslibraryjb.database.windows.net',
+//     database: 'PSLibrary',
+//
+//     options: {
+//         encrypt: true // use this if you're on Windows Azure
+//     }
+// };
 
 const nav = [
     {link: '/books', title: 'Book'},
@@ -28,8 +30,7 @@ const nav = [
 ];
 
 const bookRouter = require('./src/routes/bookRoutes')(nav, title);
-
-sql.connect(config).catch(err => debug(err));
+const adminRouter = require('./src/routes/adminRoutes')(nav, title);
 
 app.use(morgan('tiny'));
 app.use(express.static(path.join(__dirname, '/public')));
@@ -40,6 +41,7 @@ app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
 app.use('/books', bookRouter);
+app.use('/admin', adminRouter);
 
 app.get('/', (req, res) => {
     res.render(
