@@ -24,6 +24,7 @@ footer {
 
 }
 
+
 #masthead {
     min-height: 199px;
     background-color: #000044;
@@ -50,7 +51,6 @@ footer {
     padding-left: 22px;
     padding-right: 22px;
 }
-
 #topPanel .panel-body {
     padding-top: 0px;
 }
